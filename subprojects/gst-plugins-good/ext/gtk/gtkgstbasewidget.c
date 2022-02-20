@@ -570,6 +570,12 @@ gtk_gst_base_widget_set_format (GtkGstBaseWidget * widget,
 
   widget->pending_resize = TRUE;
   widget->pending_v_info = *v_info;
+  if (widget->pending_buffer)
+    gst_buffer_unref (widget->pending_buffer);
+  if (widget->buffer)
+    gst_buffer_unref (widget->buffer);
+  widget->pending_buffer = NULL;
+  widget->buffer = NULL;
 
   GTK_GST_BASE_WIDGET_UNLOCK (widget);
 
