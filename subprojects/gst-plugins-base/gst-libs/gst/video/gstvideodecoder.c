@@ -3624,7 +3624,8 @@ gst_video_decoder_clip_and_push_buf (GstVideoDecoder * decoder, GstBuffer * buf)
   }
 
   segment = &decoder->output_segment;
-  if (gst_segment_clip (segment, GST_FORMAT_TIME, start, stop, &cstart, &cstop)) {
+  if (segment->format != GST_FORMAT_UNDEFINED
+      && gst_segment_clip (segment, GST_FORMAT_TIME, start, stop, &cstart, &cstop)) {
     GST_BUFFER_PTS (buf) = cstart;
 
     if (stop != GST_CLOCK_TIME_NONE && GST_CLOCK_TIME_IS_VALID (duration))
