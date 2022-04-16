@@ -341,6 +341,7 @@ gst_gtk_base_sink_navigation_send_event (GstNavigation * navigation,
     gst_structure_set (structure,
         "pointer_x", G_TYPE_DOUBLE, (gdouble) stream_x,
         "pointer_y", G_TYPE_DOUBLE, (gdouble) stream_y, NULL);
+    g_object_unref (widget);
   }
 
   event = gst_event_new_navigation (structure);
@@ -372,11 +373,14 @@ gst_gtk_base_sink_start_on_main (GstBaseSink * bsink)
   GstGtkBaseSink *gst_sink = GST_GTK_BASE_SINK (bsink);
   GstGtkBaseSinkClass *klass = GST_GTK_BASE_SINK_GET_CLASS (bsink);
   GtkWidget *toplevel;
+  GtkGstBaseWidget *widget;
 
-  if (gst_gtk_base_sink_get_widget (gst_sink) == NULL) {
+  widget = gst_gtk_base_sink_get_widget (gst_sink);
+  if (widget == NULL) {
     GST_ERROR_OBJECT (bsink, "Could not ensure GTK initialization.");
     return FALSE;
   }
+  g_object_unref (widget);
 
   /* After this point, gtk_sink->widget will always be set */
 
